@@ -73,11 +73,14 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <p class="copyright">&copy; Lionheart Digital LLC</p>
+      <p class="copyright">&copy; <span id="year"></span> Lionheart Digital LLC</p>
       <p class="footer-location">Proudly based in Grove City, Pennsylvania.</p>
       <p class="footer-tagline">Built with purpose. Serving with heart.</p>
     </div>
   </footer>
 
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
