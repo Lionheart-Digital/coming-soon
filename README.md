@@ -1,4 +1,5 @@
 # Lionheart Digital - Coming Soon
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Lionheart-Digital_coming-soon&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Lionheart-Digital_coming-soon)
 
 A coming soon landing page for Lionheart Digital, a Service-Disabled Veteran-Owned Small Business (SDVOSB) providing digital services.
 
