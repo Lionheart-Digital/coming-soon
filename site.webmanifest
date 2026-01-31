@@ -1,0 +1,23 @@
+{
+  "name": "Lionheart Digital",
+  "short_name": "Lionheart",
+  "description": "Veteran-owned and community-focused. Lionheart Digital was founded on integrity, purpose, and heart.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f4d83",
+  "icons": [
+    {
+      "src": "/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
