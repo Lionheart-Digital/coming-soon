@@ -135,6 +135,45 @@ a:focus-visible {
 }
 
 /* ==========================================================================
+   Services Section
+   ========================================================================== */
+
+.services {
+  padding: 80px 0;
+  background-color: #e8f0f7;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+}
+
+.service-item {
+  text-align: center;
+}
+
+.service-item i {
+  font-size: 2rem;
+  color: #0f4d83;
+  margin-bottom: 16px;
+}
+
+.service-item h3 {
+  font-size: 1.125rem;
+  color: #0f4d83;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.service-item p {
+  font-size: 0.9375rem;
+  color: #4a5568;
+  line-height: 1.7;
+}
+
+/* ==========================================================================
    Values Section
    ========================================================================== */
 
@@ -281,6 +320,15 @@ a:focus-visible {
     margin-bottom: 32px;
   }
 
+  .services {
+    padding: 60px 0;
+  }
+
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 36px;
+  }
+
   .values {
     padding: 60px 0;
   }
@@ -334,12 +382,19 @@ a:focus-visible {
     margin-bottom: 28px;
   }
 
-  .coming-soon {
-    font-size: 0.8125rem;
-  }
-
   .contact-email {
     font-size: 0.9375rem;
+  }
+
+  .services {
+    padding: 48px 0;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    max-width: 400px;
+    margin: 0 auto;
   }
 
   .values {
