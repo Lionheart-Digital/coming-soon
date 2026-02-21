@@ -12,8 +12,8 @@ module.exports = async function handler(req, res) {
   var email          = (body.email || '').trim();
   var phone          = (body.phone || '').trim();
   var message        = (body.message || '').trim();
-  var website        = body.website || '';
-  var turnstileToken = body.turnstileToken || '';
+  var website        = (body.website        || '').trim();
+  var turnstileToken = (body.turnstileToken || '').trim();
 
   // Honeypot check — silent 200 so bots think they succeeded
   if (website) {
