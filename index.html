@@ -176,14 +176,15 @@
 
           <button type="submit" class="form-submit" id="submitBtn">Send Message</button>
 
-          <div class="form-feedback form-success" id="formSuccess" hidden>
-            <p>Thanks for reaching out! We'll be in touch within 1–2 business days.</p>
-          </div>
-          <div class="form-feedback form-error-banner" id="formErrorBanner" hidden>
-            <p>Something went wrong. Please try again or email us directly at <a href="mailto:hello@lionheartdigital.co">hello@lionheartdigital.co</a>.</p>
-          </div>
-
         </form>
+
+        <div class="form-feedback form-success" id="formSuccess" hidden>
+          <p>Thanks for reaching out! We'll be in touch within 1–2 business days.</p>
+        </div>
+        <div class="form-feedback form-error-banner" id="formErrorBanner" hidden>
+          <p>Something went wrong. Please try again or email us directly at <a href="mailto:hello@lionheartdigital.co">hello@lionheartdigital.co</a>.</p>
+        </div>
+
       </div>
     </section>
   </main>
@@ -300,6 +301,7 @@
           formSuccess.hidden = false;
 
         } catch (err) {
+          console.error('Contact form submission error:', err);
           // Failure — restore button, show error banner
           submitBtn.disabled = false;
           submitBtn.textContent = 'Send Message';
