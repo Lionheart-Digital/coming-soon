@@ -47,16 +47,58 @@ Browser → Vercel (static files + /api/contact function)
 
 No build step required. For static content only, open `index.html` directly in a browser.
 
-To test the contact form serverless function locally, install the Vercel CLI and run:
+To test the contact form serverless function locally:
 
+**1. Install the Vercel CLI (once)**
 ```bash
 npm install -g vercel
-vercel dev
 ```
 
+**2. Pull environment variables from Vercel (once per machine)**
+```bash
+vercel env pull .env.local
+```
+This creates a `.env.local` file with your real keys. It is already in `.gitignore` — never commit it.
+
+**3. Start the local dev server**
+```bash
+vercel dev
+```
 The first run links the project to your Vercel account. The local server runs at http://localhost:3000.
 
-Note: Cloudflare Turnstile token verification will fail locally (Cloudflare only validates tokens from registered domains). Validation logic and honeypot behaviour can still be tested via curl — see `docs/plans/2026-02-21-contact-form.md` for test commands.
+### Testing the function with curl
+
+Cloudflare Turnstile only validates tokens from the registered domain, so token verification always fails locally. All other validation logic can be tested via curl:
+
+**Missing fields → 400**
+```bash
+curl -X POST http://localhost:3000/api/contact \
+  -H "Content-Type: application/json" \
+  -d '{"name":"","email":"","message":""}'
+```
+
+**Invalid email → 400**
+```bash
+curl -X POST http://localhost:3000/api/contact \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test","email":"notanemail","message":"Hello"}'
+```
+
+**Honeypot triggered → 200 silent rejection**
+```bash
+curl -X POST http://localhost:3000/api/contact \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Bot","email":"bot@evil.com","message":"Spam","website":"http://spam.com"}'
+```
+
+**Turnstile failure (expected locally) → 400**
+```bash
+curl -X POST http://localhost:3000/api/contact \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test","email":"test@example.com","message":"Hello there","turnstileToken":""}'
+```
+
+For full end-to-end testing including Turnstile and real emails, push to a branch and use the Vercel preview URL.
 
 ---
 
