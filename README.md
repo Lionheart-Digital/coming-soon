@@ -25,23 +25,46 @@ No build step. No framework. No npm dependencies.
 
 ## Architecture
 
+### Request flow
+
 ```
-Browser → Vercel (static files + /api/contact function)
-                        ↓
-             Cloudflare Turnstile (token verified server-side)
-                        ↓
-                    Resend API
-                   ↙            ↘
-    Notification email        Auto-reply email
-    → hello@lionheartdigital.co  → contact form submitter
+Browser
+  │
+  ├─ Static assets (index.html, styles.css, images)
+  │   └─ Served by Vercel CDN — no server involved
+  │
+  └─ Contact form POST /api/contact
+       │
+       ├─ 1. Honeypot check (server-side)
+       │       Bots that fill the hidden field get a silent 200 — they think it worked
+       │
+       ├─ 2. Input validation (server-side)
+       │       Required fields, email format, name ≤ 100 chars, message ≤ 2000 chars
+       │
+       ├─ 3. Turnstile token verification → challenges.cloudflare.com
+       │       Invisible widget runs a background challenge in the browser.
+       │       Token is always re-verified server-side regardless of client result.
+       │
+       └─ 4. Resend API (two calls)
+               ├─ Notification → hello@lionheartdigital.co (plain text, all fields)
+               └─ Auto-reply  → submitter (branded HTML, confirms receipt)
+                   Non-fatal: logged but does not fail the request if it errors
 ```
 
-**Contact form flow:**
-1. User fills the form; Cloudflare Turnstile runs a challenge in the browser
-2. On submit, client-side JS validates required fields and email format
-3. A `POST` to `/api/contact` sends the form data + Turnstile token to the Vercel function
-4. The function checks a honeypot field, validates inputs, and verifies the Turnstile token with Cloudflare
-5. On success, Resend sends two emails: a notification to the owner and a confirmation to the submitter
+### Bot protection layers
+
+| Layer | Mechanism | Where enforced |
+|-------|-----------|----------------|
+| Honeypot field | Hidden `<input name="website">` — humans leave it blank, bots fill it | Server-side in `api/contact.js` |
+| Cloudflare Turnstile | Invisible challenge runs in the browser on page load | Server-side token verification in `api/contact.js` |
+
+### Security decisions
+
+- **No database** — form data flows directly to Resend's structured API. No SQL, no injection surface.
+- **Server-side validation** mirrors client-side — the API cannot be bypassed by disabling JS.
+- **`escapeHtml()`** sanitizes user-supplied name before it is embedded in the HTML auto-reply email body.
+- **Env vars only** — API keys are never in source code. Read at function runtime from Vercel's environment.
+- **Resend API key** scoped to Sending Access + `lionheartdigital.co` domain only (principle of least privilege).
 
 ---
 
@@ -68,39 +91,106 @@ vercel dev
 ```
 The first run links the project to your Vercel account. The local server runs at http://localhost:3000.
 
-### Testing the function with curl
+---
 
-Cloudflare Turnstile only validates tokens from the registered domain, so token verification always fails locally. All other validation logic can be tested via curl:
+## Testing
 
-**Missing fields → 400**
+### Static site
+
+No server needed. Open `index.html` directly in any browser.
+
+```bash
+open index.html
+```
+
+Check that the contact form renders, placeholders appear, and validation fires on submit with empty fields.
+
+---
+
+### API — serverless function (local)
+
+Start the local server first (`vercel dev`), then use curl to exercise each code path.
+
+> **Note:** Turnstile token verification always fails locally — Cloudflare only validates tokens issued from the registered production domain. All other validation runs normally.
+
+**Missing required fields → 400**
 ```bash
 curl -X POST http://localhost:3000/api/contact \
   -H "Content-Type: application/json" \
   -d '{"name":"","email":"","message":""}'
 ```
 
-**Invalid email → 400**
+**Invalid email format → 400**
 ```bash
 curl -X POST http://localhost:3000/api/contact \
   -H "Content-Type: application/json" \
   -d '{"name":"Test","email":"notanemail","message":"Hello"}'
 ```
 
-**Honeypot triggered → 200 silent rejection**
+**Name exceeds 100 characters → 400**
+```bash
+curl -X POST http://localhost:3000/api/contact \
+  -H "Content-Type: application/json" \
+  -d '{"name":"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","email":"test@example.com","message":"Hello"}'
+```
+
+**Honeypot field filled → 200 silent rejection (no email sent)**
 ```bash
 curl -X POST http://localhost:3000/api/contact \
   -H "Content-Type: application/json" \
   -d '{"name":"Bot","email":"bot@evil.com","message":"Spam","website":"http://spam.com"}'
 ```
 
-**Turnstile failure (expected locally) → 400**
+**Turnstile token missing → 400 (expected locally)**
 ```bash
 curl -X POST http://localhost:3000/api/contact \
   -H "Content-Type: application/json" \
   -d '{"name":"Test","email":"test@example.com","message":"Hello there","turnstileToken":""}'
 ```
 
-For full end-to-end testing including Turnstile and real emails, push to a branch and use the Vercel preview URL.
+---
+
+### End-to-end (real emails + Turnstile)
+
+Turnstile only issues valid tokens on the registered domain. To test the full flow including real email delivery:
+
+1. Push to a feature branch — Vercel automatically creates a preview deploy
+2. Open the preview URL (shown in the Vercel dashboard or GitHub PR checks)
+3. Submit the contact form with a real email address
+4. Verify in **[Resend dashboard](https://resend.com) → Logs** that both emails were sent
+5. Check that the notification arrived at `hello@lionheartdigital.co`
+6. Check that the auto-reply arrived at the address you submitted
+
+---
+
+### Accessibility
+
+Run an automated WCAG 2.1 AA scan against the HTML file:
+
+```bash
+npx pa11y file://$(pwd)/index.html
+```
+
+Expected output: `No issues found!`
+
+For a fuller browser-rendered scan (catches dynamic content), start the local server and scan the running URL:
+
+```bash
+vercel dev &
+npx pa11y http://localhost:3000
+```
+
+---
+
+### Email delivery — Resend logs
+
+Every send attempt (success or failure) is visible in the Resend dashboard:
+
+1. Log in to [resend.com](https://resend.com)
+2. Go to **Emails** → **Logs**
+3. Filter by domain `lionheartdigital.co`
+
+Each entry shows the recipient, subject, status, and full delivery detail. Use this to debug bounces or verify sends after a form submission.
 
 ---
 
