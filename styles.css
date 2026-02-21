@@ -456,7 +456,8 @@ section {
 }
 
 .cf-turnstile {
-  margin-bottom: 24px;
+  /* Widget is set to invisible mode — no visible UI rendered */
+  display: none;
 }
 
 .form-submit {
