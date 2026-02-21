@@ -1,5 +1,7 @@
 # Lionheart Digital — Website
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Lionheart-Digital_coming-soon&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Lionheart-Digital_coming-soon)
+
 Marketing and contact site for Lionheart Digital, LLC. Veteran-owned, community-focused.
 
 **Live site:** https://lionheartdigital.co
