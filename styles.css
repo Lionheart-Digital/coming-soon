@@ -335,6 +335,156 @@ section {
 }
 
 /* ==========================================================================
+   Contact Section
+   ========================================================================== */
+
+.contact {
+  padding: 80px 0;
+  background-color: #ffffff;
+}
+
+.contact-heading {
+  font-size: 1.75rem;
+  color: #0f4d83;
+  text-align: center;
+  margin-bottom: 48px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.contact-form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Honeypot — visually hidden but not display:none so bots don't skip it */
+.contact-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #2d3436;
+  margin-bottom: 6px;
+}
+
+.form-required {
+  color: #0f4d83;
+}
+
+.form-optional {
+  font-weight: 400;
+  color: #718096;
+  font-size: 0.8125rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 14px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 1rem;
+  color: #2d3436;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e0;
+  border-radius: 4px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  -webkit-appearance: none;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #0f4d83;
+  box-shadow: 0 0 0 3px rgba(15, 77, 131, 0.15);
+}
+
+.form-input.has-error {
+  border-color: #e53e3e;
+}
+
+.form-input.has-error:focus {
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.15);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+.form-error {
+  display: block;
+  font-size: 0.8125rem;
+  color: #e53e3e;
+  margin-top: 6px;
+  min-height: 1em;
+}
+
+.cf-turnstile {
+  margin-bottom: 24px;
+}
+
+.form-submit {
+  width: 100%;
+  padding: 13px 24px;
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background-color: #0f4d83;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.form-submit:hover:not(:disabled) {
+  background-color: #0a3a64;
+}
+
+.form-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.form-feedback {
+  margin-top: 20px;
+  padding: 14px 16px;
+  border-radius: 4px;
+  font-size: 0.9375rem;
+}
+
+.form-success {
+  background-color: #f0fff4;
+  border: 1px solid #9ae6b4;
+  color: #276749;
+}
+
+.form-error-banner {
+  background-color: #fff5f5;
+  border: 1px solid #feb2b2;
+  color: #9b2c2c;
+}
+
+.form-error-banner a {
+  color: #9b2c2c;
+  font-weight: 500;
+}
+
+/* ==========================================================================
    Footer
    ========================================================================== */
 
@@ -422,6 +572,15 @@ section {
     text-align: center;
   }
 
+  .contact {
+    padding: 60px 0;
+  }
+
+  .contact-heading {
+    font-size: 1.5rem;
+    margin-bottom: 36px;
+  }
+
   .site-header nav {
     gap: 20px;
   }
@@ -495,6 +654,15 @@ section {
 
   .value-item p {
     font-size: 0.875rem;
+  }
+
+  .contact {
+    padding: 48px 0;
+  }
+
+  .contact-heading {
+    font-size: 1.25rem;
+    margin-bottom: 28px;
   }
 
   .sdvosb {

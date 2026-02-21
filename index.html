@@ -15,6 +15,9 @@
   <!-- Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha384-rWj9FmWWt3OMqd9vBkWRhFavvVUYalYqGPoMdL1brs/qvvqz88gvLShYa4hKNyqb" crossorigin="anonymous" referrerpolicy="no-referrer">
 
+  <!-- Cloudflare Turnstile -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
   <!-- Styles -->
   <link rel="stylesheet" href="styles.css">
 
@@ -128,6 +131,59 @@
             <p>Doing the right thing, even when no one is watching.</p>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact" aria-labelledby="contact-heading">
+      <div class="container">
+        <h2 id="contact-heading" class="contact-heading">Get in Touch</h2>
+        <form class="contact-form" id="contactForm" novalidate>
+
+          <!-- Honeypot: hidden from real users, bots fill it -->
+          <div class="contact-honeypot" aria-hidden="true">
+            <label for="website">Website</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="form-group">
+            <label for="name" class="form-label">Name <span class="form-required" aria-hidden="true">*</span></label>
+            <input type="text" id="name" name="name" class="form-input" required autocomplete="name">
+            <span class="form-error" id="name-error" role="alert"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="form-label">Email <span class="form-required" aria-hidden="true">*</span></label>
+            <input type="email" id="email" name="email" class="form-input" required autocomplete="email">
+            <span class="form-error" id="email-error" role="alert"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="phone" class="form-label">
+              Phone <span class="form-optional">(optional)</span>
+            </label>
+            <input type="tel" id="phone" name="phone" class="form-input" autocomplete="tel">
+          </div>
+
+          <div class="form-group">
+            <label for="message" class="form-label">Message <span class="form-required" aria-hidden="true">*</span></label>
+            <textarea id="message" name="message" class="form-input form-textarea" required rows="5" maxlength="2000"></textarea>
+            <span class="form-error" id="message-error" role="alert"></span>
+          </div>
+
+          <!-- Cloudflare Turnstile widget — replace data-sitekey with your actual site key -->
+          <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-theme="light"></div>
+
+          <button type="submit" class="form-submit" id="submitBtn">Send Message</button>
+
+          <div class="form-feedback form-success" id="formSuccess" hidden>
+            <p>Thanks for reaching out! We'll be in touch within 1–2 business days.</p>
+          </div>
+          <div class="form-feedback form-error-banner" id="formErrorBanner" hidden>
+            <p>Something went wrong. Please try again or email us directly at <a href="mailto:hello@lionheartdigital.co">hello@lionheartdigital.co</a>.</p>
+          </div>
+
+        </form>
       </div>
     </section>
   </main>
