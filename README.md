@@ -194,6 +194,42 @@ Each entry shows the recipient, subject, status, and full delivery detail. Use t
 
 ---
 
+## SEO
+
+### What's in place
+
+| Signal | Location | Notes |
+|--------|----------|-------|
+| Page title | `index.html` `<title>` | |
+| Meta description | `index.html` `<meta name="description">` | |
+| Canonical URL | `index.html` `<link rel="canonical">` | Prevents duplicate content issues |
+| Open Graph tags | `index.html` `<meta property="og:*">` | Controls link previews on Facebook, LinkedIn, etc. |
+| Twitter Card tags | `index.html` `<meta name="twitter:*">` | Controls link previews on X/Twitter |
+| JSON-LD structured data | `index.html` `<script type="application/ld+json">` | `Organization` schema — name, location, email, services |
+| robots.txt | `/robots.txt` | Allows all crawlers, points to sitemap |
+| Sitemap | `/sitemap.xml` | Single URL with last-modified date |
+| Favicons + web manifest | `/favicon.*`, `/site.webmanifest` | All major formats covered |
+
+### Verifying structured data
+
+Test the JSON-LD with Google's Rich Results Test:
+1. Go to [search.google.com/test/rich-results](https://search.google.com/test/rich-results)
+2. Enter `https://lionheartdigital.co` and run the test
+3. The Organization entity should appear with no errors
+
+### Google Search Console
+
+Submit the sitemap to speed up indexing:
+1. Go to [Google Search Console](https://search.google.com/search-console)
+2. Add and verify `lionheartdigital.co` as a property (use the DNS verification method — add a TXT record in Cloudflare)
+3. Go to **Sitemaps** → submit `https://lionheartdigital.co/sitemap.xml`
+
+### Keeping the sitemap current
+
+Update `sitemap.xml` `<lastmod>` whenever significant content changes are deployed.
+
+---
+
 ## Environment Variables
 
 Set these in the Vercel project dashboard under **Settings → Environment Variables**.
@@ -245,6 +281,8 @@ No manual deploy steps. Vercel detects the `api/` directory and deploys `api/con
 /
 ├── index.html                  # Main page (single-page site)
 ├── styles.css                  # All styles
+├── robots.txt                  # Crawler rules — allows all, references sitemap
+├── sitemap.xml                 # Single-URL sitemap for Google Search Console
 ├── api/
 │   └── contact.js              # Vercel serverless function — handles form submissions
 ├── docs/
