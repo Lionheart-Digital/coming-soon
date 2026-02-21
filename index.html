@@ -232,7 +232,12 @@
       }
 
       function isValidEmail(val) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+        if (val.length > 254) return false;
+        var at = val.indexOf('@');
+        if (at < 1 || at !== val.lastIndexOf('@')) return false;
+        var domain = val.slice(at + 1);
+        var dot = domain.lastIndexOf('.');
+        return dot > 0 && dot < domain.length - 1 && !/\s/.test(val);
       }
 
       function validateField(field) {

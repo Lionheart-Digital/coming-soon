@@ -39,8 +39,17 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Email format validation
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    // Email format validation — string ops only, no regex backtracking risk
+    var atIndex = email.indexOf('@');
+    var emailValid = email.length <= 254 &&
+      atIndex > 0 &&
+      atIndex === email.lastIndexOf('@') &&
+      (function () {
+        var domain = email.slice(atIndex + 1);
+        var dot = domain.lastIndexOf('.');
+        return dot > 0 && dot < domain.length - 1 && !/\s/.test(email);
+      }());
+    if (!emailValid) {
       return res.status(400).json({ error: 'Invalid email address' });
     }
 
