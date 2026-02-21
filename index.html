@@ -15,7 +15,12 @@
   <!-- Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha384-rWj9FmWWt3OMqd9vBkWRhFavvVUYalYqGPoMdL1brs/qvvqz88gvLShYa4hKNyqb" crossorigin="anonymous" referrerpolicy="no-referrer">
 
-  <!-- Cloudflare Turnstile -->
+  <!-- Cloudflare Turnstile
+       SRI (integrity attribute) is intentionally omitted. Cloudflare rotates this script
+       frequently for bot-detection updates; pinning a hash would break the widget.
+       Safe to omit: served over HTTPS from Cloudflare's own infrastructure (same vendor
+       as our DNS/CDN), and the script has no access to server-side secrets. The server
+       always re-verifies the Turnstile token independently. -->
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
   <!-- Styles -->
