@@ -48,6 +48,8 @@
 </head>
 <body>
 
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
   <header class="site-header">
     <div class="container header-container">
       <a href="#" class="header-logo-link" aria-label="Lionheart Digital — back to top">
@@ -61,7 +63,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="main-content">
     <!-- Hero Section -->
     <section class="hero" aria-labelledby="company-heading">
       <div class="container">
@@ -106,7 +108,7 @@
     <!-- SDVOSB Section -->
     <section class="sdvosb" aria-label="Certification">
       <div class="container">
-        <a href="https://search.certifications.sba.gov/profile/ZFKUMF6TDLR1/124J5?page=1#profile-overview" target="_blank" rel="noopener noreferrer" class="sdvosb-content sdvosb-link">
+        <a href="https://search.certifications.sba.gov/profile/ZFKUMF6TDLR1/124J5?page=1#profile-overview" target="_blank" rel="noopener noreferrer" class="sdvosb-content sdvosb-link" aria-label="View SBA SDVOSB certification profile for Lionheart Digital (opens in new tab)">
           <img src="Service-Disabled Veteran-Owned-Certified.png" alt="SBA SDVOSB Certification Logo" class="sdvosb-logo">
           <div class="sdvosb-text">
             <p class="sdvosb-label">Service-Disabled Veteran-Owned Small Business</p>
@@ -182,10 +184,10 @@
 
         </form>
 
-        <div class="form-feedback form-success" id="formSuccess" hidden>
+        <div class="form-feedback form-success" id="formSuccess" hidden role="alert" tabindex="-1">
           <p>Thanks for reaching out! We'll be in touch within 1–2 business days.</p>
         </div>
-        <div class="form-feedback form-error-banner" id="formErrorBanner" hidden>
+        <div class="form-feedback form-error-banner" id="formErrorBanner" hidden role="alert">
           <p>Something went wrong. Please try again or email us directly at <a href="mailto:hello@lionheartdigital.co">hello@lionheartdigital.co</a>.</p>
         </div>
 
@@ -306,9 +308,10 @@
 
           if (!res.ok) throw new Error('Server returned ' + res.status);
 
-          // Success — hide form, show confirmation
+          // Success — hide form, show confirmation and move focus for screen readers
           form.hidden = true;
           formSuccess.hidden = false;
+          formSuccess.focus();
 
         } catch (err) {
           console.error('Contact form submission error:', err);

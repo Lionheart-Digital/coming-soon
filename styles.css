@@ -5,7 +5,7 @@
    - Dark Blue: #0a3a64
    - Light Blue: #e8f0f7
    - Charcoal: #2d3436
-   - Muted Gold: #8b7355
+   - Muted Gold: #8a7254
    - Off-White: #fafafa
    - White: #ffffff
    ========================================================================== */
@@ -51,6 +51,27 @@ h1, h2, h3 {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* Skip navigation link — visible on focus only */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 200;
+  padding: 10px 16px;
+  background-color: #0f4d83;
+  color: #ffffff;
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0 0 4px 4px;
+  transition: top 0.1s ease;
+}
+
+.skip-link:focus {
+  top: 0;
 }
 
 /* Focus styles for keyboard navigation */
@@ -170,7 +191,7 @@ section {
 .tagline {
   font-size: 1.25rem;
   font-weight: 500;
-  color: #8b7355;
+  color: #8a7254;
   margin-bottom: 32px;
 }
 
@@ -224,6 +245,11 @@ section {
 .hero-cta:hover {
   background-color: #0a3a64;
   color: #ffffff;
+}
+
+.hero-cta:focus-visible {
+  outline: 2px solid #0a3a64;
+  outline-offset: 3px;
 }
 
 /* ==========================================================================
@@ -330,6 +356,12 @@ section {
   opacity: 0.85;
 }
 
+.sdvosb-link:focus-visible {
+  outline: 2px solid #0f4d83;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
 .sdvosb-text {
   text-align: left;
 }
@@ -406,7 +438,7 @@ section {
 
 .form-optional {
   font-weight: 400;
-  color: #718096;
+  color: #68778d;
   font-size: 0.8125rem;
 }
 
@@ -424,7 +456,7 @@ section {
 }
 
 .form-input::placeholder {
-  color: #a0aec0;
+  color: #6b7280;
 }
 
 .form-input:focus {
@@ -483,6 +515,11 @@ section {
 .form-submit:disabled {
   opacity: 0.65;
   cursor: not-allowed;
+}
+
+.form-submit:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
 }
 
 .form-feedback {
@@ -553,6 +590,12 @@ section {
 .footer-email a:hover {
   color: #ffffff;
   border-bottom-color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-email a:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 
 /* ==========================================================================
