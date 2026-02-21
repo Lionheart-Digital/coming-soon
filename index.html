@@ -318,8 +318,8 @@
           formErrBanner.hidden = false;
 
           // Reset Turnstile widget so user can retry
-          if (window.turnstile) {
-            window.turnstile.reset();
+          if (globalThis.turnstile) {
+            globalThis.turnstile.reset();
           }
         }
       });
