@@ -22,12 +22,12 @@ module.exports = async function handler(req, res) {
       return res.status(500).json({ error: 'Server configuration error' });
     }
 
-    var name           = (body.name || '').trim();
-    var email          = (body.email || '').trim();
-    var phone          = (body.phone || '').trim();
-    var message        = (body.message || '').trim();
-    var website        = (body.website        || '').trim();
-    var turnstileToken = (body.turnstileToken || '').trim();
+    const name           = (body.name || '').trim();
+    const email          = (body.email || '').trim();
+    const phone          = (body.phone || '').trim();
+    const message        = (body.message || '').trim();
+    const website        = (body.website        || '').trim();
+    const turnstileToken = (body.turnstileToken || '').trim();
 
     // Honeypot check — silent 200 so bots think they succeeded
     if (website) {
@@ -40,13 +40,13 @@ module.exports = async function handler(req, res) {
     }
 
     // Email format validation — string ops only, no regex backtracking risk
-    var atIndex = email.indexOf('@');
-    var emailValid = email.length <= 254 &&
+    const atIndex = email.indexOf('@');
+    const emailValid = email.length <= 254 &&
       atIndex > 0 &&
       atIndex === email.lastIndexOf('@') &&
       (function () {
-        var domain = email.slice(atIndex + 1);
-        var dot = domain.lastIndexOf('.');
+        const domain = email.slice(atIndex + 1);
+        const dot = domain.lastIndexOf('.');
         return dot > 0 && dot < domain.length - 1 && !/\s/.test(email);
       }());
     if (!emailValid) {
@@ -64,7 +64,7 @@ module.exports = async function handler(req, res) {
     }
 
     // Verify Cloudflare Turnstile token
-    var turnstileRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+    const turnstileRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
@@ -73,15 +73,15 @@ module.exports = async function handler(req, res) {
       }).toString(),
     });
 
-    var turnstileData = await turnstileRes.json();
+    const turnstileData = await turnstileRes.json();
     if (!turnstileData.success) {
       return res.status(400).json({ error: 'Bot verification failed' });
     }
 
-    var RESEND_API_KEY = process.env.RESEND_API_KEY;
+    const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
     // Build notification email body
-    var notifyLines = [
+    const notifyLines = [
       'Name: ' + name,
       'Email: ' + email,
     ];
@@ -89,7 +89,7 @@ module.exports = async function handler(req, res) {
     notifyLines.push('', 'Message:', message);
 
     // Send notification to owner
-    var notifyRes = await fetch('https://api.resend.com/emails', {
+    const notifyRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
         'Authorization': 'Bearer ' + RESEND_API_KEY,
@@ -105,7 +105,7 @@ module.exports = async function handler(req, res) {
     });
 
     if (!notifyRes.ok) {
-      var notifyError = await notifyRes.text();
+      const notifyError = await notifyRes.text();
       console.error('Resend notification failed:', notifyError);
       return res.status(500).json({ error: 'Failed to send notification email' });
     }
@@ -113,7 +113,7 @@ module.exports = async function handler(req, res) {
     // Send auto-reply to submitter
     // Non-fatal — log failure but don't error the response
     try {
-      var replyRes = await fetch('https://api.resend.com/emails', {
+      const replyRes = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + RESEND_API_KEY,
@@ -145,7 +145,7 @@ module.exports = async function handler(req, res) {
       });
 
       if (!replyRes.ok) {
-        var replyError = await replyRes.text();
+        const replyError = await replyRes.text();
         console.error('Resend auto-reply failed:', replyError);
       }
     } catch (err) {

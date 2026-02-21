@@ -208,19 +208,19 @@
   </script>
   <script>
     (function () {
-      var form = document.getElementById('contactForm');
+      const form = document.getElementById('contactForm');
       if (!form) return;
 
-      var nameInput    = document.getElementById('name');
-      var emailInput   = document.getElementById('email');
-      var messageInput = document.getElementById('message');
-      var phoneInput   = document.getElementById('phone');
-      var websiteInput = document.getElementById('website');
-      var submitBtn    = document.getElementById('submitBtn');
-      var formSuccess  = document.getElementById('formSuccess');
-      var formErrBanner = document.getElementById('formErrorBanner');
+      const nameInput    = document.getElementById('name');
+      const emailInput   = document.getElementById('email');
+      const messageInput = document.getElementById('message');
+      const phoneInput   = document.getElementById('phone');
+      const websiteInput = document.getElementById('website');
+      const submitBtn    = document.getElementById('submitBtn');
+      const formSuccess  = document.getElementById('formSuccess');
+      const formErrBanner = document.getElementById('formErrorBanner');
 
-      var fields = [
+      const fields = [
         { el: nameInput,    errorId: 'name-error',    label: 'Name' },
         { el: emailInput,   errorId: 'email-error',   label: 'Email' },
         { el: messageInput, errorId: 'message-error', label: 'Message' },
@@ -238,15 +238,15 @@
 
       function isValidEmail(val) {
         if (val.length > 254) return false;
-        var at = val.indexOf('@');
+        const at = val.indexOf('@');
         if (at < 1 || at !== val.lastIndexOf('@')) return false;
-        var domain = val.slice(at + 1);
-        var dot = domain.lastIndexOf('.');
+        const domain = val.slice(at + 1);
+        const dot = domain.lastIndexOf('.');
         return dot > 0 && dot < domain.length - 1 && !/\s/.test(val);
       }
 
       function validateField(field) {
-        var val = field.el.value.trim();
+        const val = field.el.value.trim();
         if (!val) {
           showError(field, field.label + ' is required.');
           return false;
@@ -272,9 +272,9 @@
         e.preventDefault();
 
         // Validate all required fields
-        var allValid = fields.map(validateField).every(Boolean);
+        const allValid = fields.map(validateField).every(Boolean);
         if (!allValid) {
-          var firstInvalid = fields.find(function (f) {
+          const firstInvalid = fields.find(function (f) {
             return f.el.classList.contains('has-error');
           });
           if (firstInvalid) firstInvalid.el.focus();
@@ -282,8 +282,8 @@
         }
 
         // Get Turnstile token (rendered by the widget into a hidden input)
-        var tokenInput = form.querySelector('[name="cf-turnstile-response"]');
-        var turnstileToken = tokenInput ? tokenInput.value : '';
+        const tokenInput = form.querySelector('[name="cf-turnstile-response"]');
+        const turnstileToken = tokenInput ? tokenInput.value : '';
 
         // Update UI to sending state
         submitBtn.disabled = true;
@@ -291,7 +291,7 @@
         formErrBanner.hidden = true;
 
         try {
-          var res = await fetch('/api/contact', {
+          const res = await fetch('/api/contact', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
