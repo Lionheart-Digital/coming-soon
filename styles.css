@@ -131,6 +131,12 @@ section {
   border-radius: 2px;
 }
 
+.header-logo-link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
 /* ==========================================================================
    Hero Section
    ========================================================================== */
