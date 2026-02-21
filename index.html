@@ -200,5 +200,118 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
+  <script>
+    (function () {
+      var form = document.getElementById('contactForm');
+      if (!form) return;
+
+      var nameInput    = document.getElementById('name');
+      var emailInput   = document.getElementById('email');
+      var messageInput = document.getElementById('message');
+      var phoneInput   = document.getElementById('phone');
+      var websiteInput = document.getElementById('website');
+      var submitBtn    = document.getElementById('submitBtn');
+      var formSuccess  = document.getElementById('formSuccess');
+      var formErrBanner = document.getElementById('formErrorBanner');
+
+      var fields = [
+        { el: nameInput,    errorId: 'name-error',    label: 'Name' },
+        { el: emailInput,   errorId: 'email-error',   label: 'Email' },
+        { el: messageInput, errorId: 'message-error', label: 'Message' },
+      ];
+
+      function showError(field, msg) {
+        field.el.classList.add('has-error');
+        document.getElementById(field.errorId).textContent = msg;
+      }
+
+      function clearError(field) {
+        field.el.classList.remove('has-error');
+        document.getElementById(field.errorId).textContent = '';
+      }
+
+      function isValidEmail(val) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+      }
+
+      function validateField(field) {
+        var val = field.el.value.trim();
+        if (!val) {
+          showError(field, field.label + ' is required.');
+          return false;
+        }
+        if (field.el === emailInput && !isValidEmail(val)) {
+          showError(field, 'Please enter a valid email address.');
+          return false;
+        }
+        clearError(field);
+        return true;
+      }
+
+      // Clear error as user corrects each field
+      fields.forEach(function (field) {
+        field.el.addEventListener('input', function () {
+          if (field.el.classList.contains('has-error')) {
+            validateField(field);
+          }
+        });
+      });
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        // Validate all required fields
+        var allValid = fields.map(validateField).every(Boolean);
+        if (!allValid) {
+          var firstInvalid = fields.find(function (f) {
+            return f.el.classList.contains('has-error');
+          });
+          if (firstInvalid) firstInvalid.el.focus();
+          return;
+        }
+
+        // Get Turnstile token (rendered by the widget into a hidden input)
+        var tokenInput = form.querySelector('[name="cf-turnstile-response"]');
+        var turnstileToken = tokenInput ? tokenInput.value : '';
+
+        // Update UI to sending state
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending\u2026';
+        formErrBanner.hidden = true;
+
+        try {
+          var res = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name:           nameInput.value.trim(),
+              email:          emailInput.value.trim(),
+              phone:          phoneInput.value.trim(),
+              message:        messageInput.value.trim(),
+              website:        websiteInput.value,
+              turnstileToken: turnstileToken,
+            }),
+          });
+
+          if (!res.ok) throw new Error('Server returned ' + res.status);
+
+          // Success — hide form, show confirmation
+          form.hidden = true;
+          formSuccess.hidden = false;
+
+        } catch (err) {
+          // Failure — restore button, show error banner
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Send Message';
+          formErrBanner.hidden = false;
+
+          // Reset Turnstile widget so user can retry
+          if (window.turnstile) {
+            window.turnstile.reset();
+          }
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
